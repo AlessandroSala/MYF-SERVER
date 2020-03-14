@@ -1,12 +1,19 @@
 <template>
-  <div id="app">
+  <v-app>
+  <div id="app" >
+    <p-header />
     <router-view/>
   </div>
+  </v-app>
 </template>
 
 <script>
+import PHeader from '@/components/Header.vue'
 export default {
-  name: 'App'
+  name: 'App',
+  components : {
+    PHeader
+  }
 }
 </script>
 
@@ -17,6 +24,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

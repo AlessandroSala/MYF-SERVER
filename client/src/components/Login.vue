@@ -5,7 +5,7 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar  color="primary" flat dark >
-                <v-toolbar-title>Register to MYF</v-toolbar-title>
+                <v-toolbar-title>Welcome Back!</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -17,7 +17,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="register">Sign up</v-btn>
+                <v-btn color="primary" @click="login">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -26,6 +26,7 @@
     </v-content>
   
 </template>
+
 
 <script>
 /* eslint-disable */
@@ -39,13 +40,14 @@ export default {
     }
   },
   methods: {
-    async register(){
+    async login(){
       try {
-      const response = await AuthenticationService.register({
+      const response = await AuthenticationService.login({
         email: this.email,
         password: this.password
       })
       } catch (e){
+        console.log(e)
         this.error = e.response.data.error
       }
     }
