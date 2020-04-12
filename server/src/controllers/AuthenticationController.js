@@ -13,10 +13,14 @@ module.exports = {
     async register (req, res) {
         try{
             const user = await User.create(req.body)
-            res.send(user.toJSON())
+            const uToJSON = user.toJSON()
+            res.send({
+                user: uToJSON,
+                token: jwtSignUser(uToJSON)
+            })
         } catch(e){
             res.status(400).send({
-                error: 'Error encountered'
+                error: e+'Error encountered'
             })
         }
     },
@@ -33,13 +37,13 @@ module.exports = {
                     error: 'Login information incorrect'
                 })
             }
-            const isPwValid = password === user.password
+            const isPwValid = await user.comparePassword(password)
             if(!isPwValid) {
                 return res.status(400).send({
                     error: 'Login information incorrect'
                 })
             }
-            uToJSON = user.toJSON()
+            const uToJSON = user.toJSON()
             res.send({
                 user: uToJSON,
                 token: jwtSignUser(uToJSON)

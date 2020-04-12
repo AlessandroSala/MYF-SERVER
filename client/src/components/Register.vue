@@ -9,7 +9,7 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field label="Email" name="email" type="email" v-model="email" />
+                  <v-text-field label="Email" name="email" type="email" v-model="email" auto  autocomplete="off"/>
                   <v-text-field  id="password"  label="Password" name="password"  type="password" v-model="password"/>
 
                 </v-form>
@@ -45,6 +45,8 @@ export default {
         email: this.email,
         password: this.password
       })
+      this.$store.dispatch('setToken', response.data.token)
+      this.$store.dispatch('setUser', response.data.user)
       } catch (e){
         this.error = e.response.data.error
       }
