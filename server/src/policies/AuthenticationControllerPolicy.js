@@ -10,7 +10,10 @@ module.exports = {
             )
         }
 
-        const {error, value} = joi.validate(req.body, schema)
+        const {error, value} = joi.validate({
+            email: req.body.email,
+            password: req.body.password},
+            schema)
 
         if (error) {
             switch(error.details[0].context.key){

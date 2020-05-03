@@ -2,18 +2,31 @@ const {Operation} = require('../models')
 
 
 module.exports = {
-    async getOps (req, res) {
-        const {id} = req.body
-        const operation = Operation.findAll({
-            limit: 10
-        })
-        const opToJSON=operation.toJSON()
-        res.send({ operation: opToJSON})
+    async indexAll (req, res) {
+        const {id} = req.user.id
+        const {limit} = req.body
+        const operations = Operation.findAll({
+            where: {
+                UserId: id
+            },
+            limit: limit
+        }).map(operation => operation.toJSON())
+        res.send({operations})
     },
     
     async add (req, res) {
         try{
-            const operation = await Operation.create(req.body)
+            //const {id} = req.user.id
+            const {title, description, type, id, amount} = req.body
+            console.log(title, description, type, id)
+
+            const operation = await Operation.create({
+                UserId: id,
+                title: title,
+                description: description,
+                type: type,
+                amount: amount
+            })
             const opToJSON = operation.toJSON()
             res.send({
                 operation: opToJSON
@@ -23,31 +36,29 @@ module.exports = {
                 error: e+'Error encountered'
             })
         }
-    }/*,
+    },
 
     async remove (req, res) {
         try{
-            const {email, password} = req.body
-            const user = await User.findOne({
+            //const {userId} = req.user.id
+            const operationToRemove = req.params.operation
+            const userId=operation.userId
+            console.log(userId)
+            //const {userId, operationId} = operationToRemove
+            const operation = await Operation.findOne({
                 where: {
-                    email: email
+                    id: operationId,
+                    UserId: userId
                 }
             })
-            if(!user) {
-                return res.status(403).send({
-                    error: 'Login information incorrect'
+            if(!operation) {
+                res.status(403).send({
+                    error: 'No access to this operation'
                 })
             }
-            const isPwValid = await user.comparePassword(password)
-            if(!isPwValid) {
-                return res.status(400).send({
-                    error: 'Login information incorrect'
-                })
-            }
-            const uToJSON = user.toJSON()
+            await operation.destroy()
             res.send({
-                user: uToJSON,
-                token: jwtSignUser(uToJSON)
+                operation
             })
         } catch(e){
             res.status(500).send({
@@ -55,5 +66,4 @@ module.exports = {
             })
         }
     }
-    */
 }
