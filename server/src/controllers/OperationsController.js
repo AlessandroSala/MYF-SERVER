@@ -1,27 +1,28 @@
 const {Operation} = require('../models')
-
+const _ = require('lodash')
 
 module.exports = {
     async indexAll (req, res) {
-        const {id} = req.user.id
-        const {limit} = req.body
-        const operations = Operation.findAll({
+        //const {id} = req.user.id
+        const {limit, id} = req.body
+        const operations = await Operation.findAll({
             where: {
                 UserId: id
             },
             limit: limit
-        }).map(operation => operation.toJSON())
+        })
+        //.map(operation => operation.toJSON())
+        
         res.send({operations})
     },
     
     async add (req, res) {
         try{
             //const {id} = req.user.id
-            const {title, description, type, id, amount} = req.body
-            console.log(title, description, type, id)
+            const {title, description, type, userId, amount} = req.body
 
             const operation = await Operation.create({
-                UserId: id,
+                UserId: userId,
                 title: title,
                 description: description,
                 type: type,
@@ -41,10 +42,7 @@ module.exports = {
     async remove (req, res) {
         try{
             //const {userId} = req.user.id
-            const operationToRemove = req.params.operation
-            const userId=operation.userId
-            console.log(userId)
-            //const {userId, operationId} = operationToRemove
+            const { userId, operationId } = req.body
             const operation = await Operation.findOne({
                 where: {
                     id: operationId,
@@ -60,9 +58,9 @@ module.exports = {
             res.send({
                 operation
             })
-        } catch(e){
+        } catch(e) {
             res.status(500).send({
-                error: 'Error occured'
+                error: e+'Error occured'
             })
         }
     }

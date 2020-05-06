@@ -1,7 +1,6 @@
 const Promise = require('bluebird')
 const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'))
 
-
 module.exports = (sequelize, DataTypes) => {
     const Operation = sequelize.define('Operation', {
         id: {
@@ -20,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         hooks: {
             afterCreate: function (operation, options) {
                 const {User} = require('../models')
-                const user = User.findByPk(operation.UserId).then(user => {
+                User.findByPk(operation.UserId).then(user => {
                     currentBalance = Number(user.balance)
                     amountToAdd = operation.type == 0 ? Number(operation.amount) : -Number(operation.amount)
                     user.update({
@@ -28,6 +27,16 @@ module.exports = (sequelize, DataTypes) => {
                     })
                 })
                 
+            },
+            afterDestroy: function (operation, options) {
+                const {User} = require('../models')
+                User.findByPk(operation.UserId).then(user => {
+                    currentBalance = Number(user.balance)
+                    amountToAdd = operation.type == 0 ? -Number(operation.amount) : Number(operation.amount)
+                    user.update({
+                        balance: currentBalance + amountToAdd
+                    })
+                }) 
             }
         }
     })

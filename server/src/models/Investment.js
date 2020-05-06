@@ -12,11 +12,34 @@ module.exports = (sequelize, DataTypes) => {
         },
         ISIN: DataTypes.STRING,
         quantity: DataTypes.INTEGER,
-        buyPrice: DataTypes.DOUBLE
-
-        
-
-    })
+        purchasePrice: DataTypes.DOUBLE
+    },{ hooks: {
+        afterCreate: function (investment, options) {
+            const {User} = require('../models')
+            try{
+                User.findByPk(investment.UserId).then(user => {
+                    currentBalance = Number(user.balance)
+                    amountToAdd = -investment.purchasePrice*investment.quantity
+                    user.update({
+                        balance: currentBalance + amountToAdd
+                    })
+                })
+            } catch(err) {
+                console.log(err)
+            }
+            
+        },
+        afterDestroy: function (investment, options) {
+            const {User} = require('../models')
+            User.findByPk(investment.UserId).then(user => {
+                const updatedBalance = Number(user.balance) + investment.purchasePrice*investment.quantity
+                user.update({
+                    balance: updatedBalance
+                }).then()
+            })
+            
+        }
+    }})
     Investment.associate = function(models) {
         Investment.belongsTo(models.User)
     }
