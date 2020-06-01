@@ -3,17 +3,18 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import vuetify from '@/plugins/vuetify' // path to vuetify export
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
 
 sync(store, router)
 
 Vue.config.productionTip = false
-
+Vue.use(Buefy)
 /* eslint-disable no-new */
 new Vue({
-  vuetify,
+  Buefy,
   el: '#app',
   router,
   store,

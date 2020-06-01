@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
         amount: DataTypes.DOUBLE,
         title: DataTypes.STRING,
         description: DataTypes.STRING,
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        date: DataTypes.DATEONLY
         
 
     },{

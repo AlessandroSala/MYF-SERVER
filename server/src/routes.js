@@ -1,6 +1,7 @@
 const AuthenticationController = require('./controllers/AuthenticationController')
 const OperationsController = require('./controllers/OperationsController')
 const InvestmentsController = require('./controllers/InvestmentsController')
+const StockController = require('./controllers/StockController')
 
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
 const isAuthenticated = require('./policies/isAuthenticated')
@@ -14,29 +15,33 @@ module.exports = (app) => {
         AuthenticationController.login)
         
         app.get('/operations',
-        //isAuthenticated, 
+        isAuthenticated, 
         OperationsController.indexAll)
 
         app.post('/operations',
-        //isAuthenticated,
+        isAuthenticated,
         OperationsController.add)
 
         app.delete('/operations',
-        //isAuthenticated,
+        isAuthenticated,
         OperationsController.remove)
 
         app.get('/investments',
-        //isAuthenticated, 
+        isAuthenticated, 
         InvestmentsController.indexAll)
 
         app.post('/investments',
-        //isAuthenticated,
+        isAuthenticated,
         InvestmentsController.add)
 
-        app.delete('/investments/remove',
-        //isAuthenticated,
-        InvestmentsController.remove),
+        app.delete('/investments',
+        isAuthenticated,
+        InvestmentsController.remove)
+
         app.delete('/investments/sell',
-        //isAuthenticated,
+        isAuthenticated,
         InvestmentsController.sell)
+
+        app.get('/stock/:isin',
+                StockController.getPrices)
 }

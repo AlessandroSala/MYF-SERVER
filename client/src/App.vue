@@ -1,18 +1,27 @@
+
+
 <template>
-  <v-app>
+
+  
   <div id="app" >
-    <p-header />
+    <b-navbar>
+        <b-navbar-item>
+          Titolo
+        </b-navbar-item>
+    </b-navbar>
     <router-view/>
   </div>
-  </v-app>
+
 </template>
 
 <script>
-import PHeader from '@/components/Header.vue'
+import Header from '@/components/Header.vue'
+import Drawer from '@/components/Drawer.vue'
 export default {
   name: 'App',
   components : {
-    PHeader
+    Header,
+    Drawer
   }
 }
 </script>

@@ -3,8 +3,9 @@ const _ = require('lodash')
 
 module.exports = {
     async indexAll (req, res) {
-        //const {id} = req.user.id
-        const {limit, id} = req.body
+        const id = req.user.id
+        //const {limit, id} = req.body
+		const limit = 10
         const operations = await Operation.findAll({
             where: {
                 UserId: id
@@ -18,15 +19,16 @@ module.exports = {
     
     async add (req, res) {
         try{
-            //const {id} = req.user.id
-            const {title, description, type, userId, amount} = req.body
+            const id = req.user.id
+            const {title, description, type, amount, date} = req.body
 
             const operation = await Operation.create({
-                UserId: userId,
+                UserId: id,
                 title: title,
                 description: description,
                 type: type,
-                amount: amount
+                amount: amount,
+                date: date
             })
             const opToJSON = operation.toJSON()
             res.send({
@@ -41,8 +43,8 @@ module.exports = {
 
     async remove (req, res) {
         try{
-            //const {userId} = req.user.id
-            const { userId, operationId } = req.body
+            const userId = req.user.id
+            const { operationId } = req.body
             const operation = await Operation.findOne({
                 where: {
                     id: operationId,
