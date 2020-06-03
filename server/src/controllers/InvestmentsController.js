@@ -3,12 +3,10 @@ const { Investment, Operation } = require('../models')
 module.exports = {
     async indexAll(req, res) {
         const id = req.user.id
-		const limit = 10
         const investments = await Investment.findAll({
             where: {
                 UserId: id
-            },
-            limit: limit
+            }
         })
         //.map(investment => investment.toJSON())
         res.send({ investments })

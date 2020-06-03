@@ -1,4 +1,4 @@
-const y = require('yahoo-stock-prices')
+const y = require('yahoo-finance')
 
 module.exports = {
 	async getPrices(req, res) {
@@ -14,19 +14,16 @@ module.exports = {
         }
 		console.log(ISIN)
 		let response = {}
-		try {
-			y.getHistoricalPrices(fMonth, 1, yearToRetrive, currDate.getMonth(), 1, currDate.getFullYear(), ISIN, '1mo', function(err, prices){
-				if(!err){
-					prices.forEach((r, i) => {
-						response[r.date] = r.open
-					})
-					res.send(response)
-				} else {
-					res.status(404).send({
-						error: "error"
-					})
-				}
+		
 
+		try {
+				y.historical({
+			  symbol: ISIN,
+			  from: `${yearToRetrive}-${fMonth}-01`,
+			  to: `${currDate.getFullYear()}-${currDate.getMonth()}-01`,
+			  period: 'm'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
+			}, function (err, quotes) {
+			  res.send(quotes)
 			});
 		} catch(err) {
 			res.status(404).send({

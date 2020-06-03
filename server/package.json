@@ -26,6 +26,7 @@
     "sequelize": "^5.21.6",
     "sequelize-cli": "^5.5.1",
     "sqlite3": "^4.1.1",
+    "yahoo-finance": "^0.3.6",
     "yahoo-stock-prices": "^1.0.1"
   },
   "devDependencies": {}

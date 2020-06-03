@@ -2,6 +2,7 @@ const AuthenticationController = require('./controllers/AuthenticationController
 const OperationsController = require('./controllers/OperationsController')
 const InvestmentsController = require('./controllers/InvestmentsController')
 const StockController = require('./controllers/StockController')
+const StatisticsController = require('./controllers/StatisticsController')
 
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
 const isAuthenticated = require('./policies/isAuthenticated')
@@ -44,4 +45,28 @@ module.exports = (app) => {
 
         app.get('/stock/:isin',
                 StockController.getPrices)
+
+        app.get('/categories/month/:month',
+                isAuthenticated,
+                OperationsController.categoryData)
+
+        app.get('/statistics/dbdexp/:month',
+                isAuthenticated,
+                OperationsController.dayByDayExpenses)
+
+        app.get('/statistics/dbdear/:month',
+                isAuthenticated,
+                OperationsController.dayByDayEarnings)
+
+        app.get('/statistics/avg/:type',
+                isAuthenticated,
+                StatisticsController.getAverage)
+
+        app.get('/statistics/yearly/:type/:year',
+                isAuthenticated,
+                StatisticsController.getYearlyDataOperation)
+
+        app.get('/statistics/monthly/:type/:month',
+                isAuthenticated,
+                StatisticsController.getMonthlyDataOperation)
 }
